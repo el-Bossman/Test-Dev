@@ -1,7 +1,7 @@
+from itertools import count
 from django.db import models
 
 # Create your models here.
-
 
 class VehicleType(models.Model):
     name = models.CharField(max_length=32)
@@ -14,7 +14,8 @@ class VehicleType(models.Model):
 class Vehicle(models.Model):
     name = models.CharField(max_length=32)
     passengers = models.PositiveIntegerField()
-    vehicle_type = models.ForeignKey(VehicleType, null=True, on_delete=models.SET_NULL)
+    vehicle_type = models.ForeignKey(
+        VehicleType, null=True, on_delete=models.SET_NULL)
     number_plate = models.CharField(max_length=10)
 
     def __str__(self) -> str:
@@ -24,6 +25,7 @@ class Vehicle(models.Model):
         return self.vehicle_type.max_capacity >= self.passengers
 
 
+
 class Journey(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
     start = models.DateField()
@@ -31,3 +33,9 @@ class Journey(models.Model):
 
     def __str__(self) -> str:
         return f"{self.vehicle.name} ({self.start} - {self.end})"
+
+    def is_finished(self):
+        finish = False
+        if self.end:
+            finish = True
+        return finish
