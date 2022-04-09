@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class VehicleType(models.Model):
     name = models.CharField(max_length=32)
     max_capacity = models.PositiveIntegerField()
@@ -24,6 +25,21 @@ class Vehicle(models.Model):
     def can_start(self) -> bool:
         return self.vehicle_type.max_capacity >= self.passengers
 
+    def get_distribution(self):
+        passengers = []
+        capacity = []
+        count = 0
+        for i in range(int(self.vehicle_type.max_capacity/2)):
+            for j in range(2):
+                if self.passengers > count:
+                    passengers.append(True)
+                    count += 1
+                else:
+                    passengers.append(False)
+                    count += 1
+            capacity.append(passengers)
+            passengers = []
+        return capacity
 
 
 class Journey(models.Model):
