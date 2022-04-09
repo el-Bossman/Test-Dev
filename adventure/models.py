@@ -41,6 +41,16 @@ class Vehicle(models.Model):
             passengers = []
         return capacity
 
+    def validate_number_plate(self, num_plate):
+        num_plate = self.number_plate.split("-")
+        valid = False
+        for n in num_plate[0]:
+            if n.isalpha():
+                valid = True
+        if num_plate[1].isdigit() and num_plate[2].isdigit():
+            valid = True
+        return valid
+
 
 class Journey(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
