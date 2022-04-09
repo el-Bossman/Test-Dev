@@ -1,5 +1,5 @@
 from django.utils import timezone
-
+from datetime import date
 from adventure import models
 
 
@@ -19,3 +19,6 @@ class JourneyRepository:
         return models.Journey.objects.create(
             vehicle=vehicle, start=timezone.now().date()
         )
+    def stop_journey(self, journey: models.Journey, end: date) -> models.Journey:
+        journey.end = end
+        return journey
