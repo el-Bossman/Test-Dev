@@ -43,3 +43,20 @@ class StartJourneyAPIView(generics.CreateAPIView):
 
     def get_repository(self) -> repositories.JourneyRepository:
         return repositories.JourneyRepository()
+
+class StopJourneyAPIView(generics.CreateAPIView):
+    serializer_class = serializers.JourneySerializer
+
+    def perform_create(self, serializer) -> None:
+        repo = self.get_repository()
+        notifier = notifiers.Notifier()
+        usecase = usecases.StopJourney(repo, notifier).set_params(
+            serializer.validated_data
+        )
+        try:
+            usecase.execute()
+        except usecases.StopJourney.CantStop as e:
+            raise ValidationError({"detail": str(e)})
+
+    def get_repository(self) -> repositories.JourneyRepository:
+        return repositories.JourneyRepository()
