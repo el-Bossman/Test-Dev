@@ -25,3 +25,21 @@ class StartJourney:
 
     class CantStart(Exception):
         pass
+
+class StopJourney:
+    def __init__(self, repository: JourneyRepository, notifier: Notifier):
+        self.repository = repository
+        self.notifier = notifier
+
+    def set_params(self, data: dict) -> StartJourney:
+        self.data = data
+        return self
+    def execute(self) -> None:
+        if self.journey.start:
+            self.repository.stop_journey(self.journey, self.data["date"])
+        else:
+            raise StopJourney.CantStop("journey can't start") 
+
+class CantStop(Exception):
+        pass
+        
